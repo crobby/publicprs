@@ -1,0 +1,44 @@
+name: Build and Release
+
+on:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.21'
+
+      - name: Build the binary
+        run: go build -o publicprs
+
+      - name: Archive the binary
+        uses: actions/upload-artifact@v3
+        with:
+          name: publicprs
+          path: publicprs
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download the binary
+        uses: actions/download-artifact@v3
+        with:
+          name: publicprs
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: publicprs
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
