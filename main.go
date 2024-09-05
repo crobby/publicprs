@@ -30,13 +30,13 @@ func main() {
 	addToProject := flag.Bool("addtoproject", false, "Add matching PRs to the given project")
 	projectNumber := flag.Int("project", 79, "GitHub project number")
 
+	flag.Parse()
+	ctx := context.Background()
+
 	token := os.Getenv("GITHUB_TOKEN")
 	if token == "" {
 		log.Fatal("GITHUB_TOKEN is required")
 	}
-
-	flag.Parse()
-	ctx := context.Background()
 
 	var httpClient = oauth2.NewClient(ctx, oauth2.StaticTokenSource(
 		&oauth2.Token{AccessToken: token},
