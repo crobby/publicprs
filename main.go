@@ -150,7 +150,7 @@ func main() {
 	})
 
 	fmt.Printf("PRs created by users outside of %s:\n", orgList)
-	fmt.Println("-------------------------------------------")
+	fmt.Printf("-------------------------------------------")
 	for _, pr := range pullRequests {
 		if _, isMember := members[pr.Author]; !isMember {
 			if !*includeBots && slices.Contains(botsToExcludeList, pr.Author) {
